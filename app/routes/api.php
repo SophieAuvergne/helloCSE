@@ -13,4 +13,6 @@ Route::get('/profiles', [ProfileController::class, 'indexPublic']);
 
 //Routes protégée, authentification necessaire
 Route::middleware('auth:sanctum')->post('/profiles', [ProfileController::class, 'store']);
+Route::middleware('auth:sanctum')->put('/profiles/{profile}', [ProfileController::class, 'update']);
+Route::middleware('auth:sanctum')->delete('/profiles/{profile}', [ProfileController::class, 'destroy']);
 Route::middleware('auth:sanctum')->post('/profiles/{profile}/comments', [CommentController::class, 'store']);

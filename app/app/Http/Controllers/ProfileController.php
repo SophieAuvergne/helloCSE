@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProfileRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    public function store(StoreProfileRequest $request)
+    public function store(StoreProfileRequest $request): JsonResponse
     {
         $path = is_null($request->file('image')) ? null : $request->file('image')->store('images', 'public');
 
@@ -23,7 +25,26 @@ class ProfileController extends Controller
         return response()->json([$profile, 201]);
     }
 
-    public function indexPublic()
+    public function update(UpdateProfileRequest $request, Profile $profile): JsonResponse
+    {
+        $data = $request->validated();
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('profiles', 'public');
+            $data['image_path'] = $path;
+        }
+        $profile->update($data);
+
+        return response()->json(['profile' => $profile], 200);
+    }
+
+    public function destroy(Profile $profile): JsonResponse
+    {
+        $profile->delete();
+
+        return response()->json(['message' => 'Profile deleted'], 200);
+    }
+
+    public function indexPublic(): JsonResponse
     {
         return Profile::where('status', 'active')
             ->select('id', 'name', 'image_path')
