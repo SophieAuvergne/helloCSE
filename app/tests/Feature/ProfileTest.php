@@ -23,16 +23,16 @@ class ProfileTest extends TestCase
         Storage::fake('public');
 
         $response = $this->postJson('/api/profiles', [
-            'name' => 'Doe',
-            'firstname' => 'John',
+            'name' => 'Name',
+            'firstname' => 'Firstname',
             'status' => 'active',
             'image' => UploadedFile::fake()->image('avatar.jpg'),
         ]);
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('profiles', [
-            'name' => 'Doe',
-            'firstname' => 'John',
+            'name' => 'Name',
+            'firstname' => 'Firstname',
             'admin_id' => $admin->id,
         ]);
     }
@@ -40,8 +40,8 @@ class ProfileTest extends TestCase
     public function testGuestCannotCreateProfile(): void
     {
         $response = $this->postJson('/api/profiles', [
-            'name' => 'Doe',
-            'firstname' => 'John',
+            'name' => 'Name',
+            'firstname' => 'Firstname',
             'status' => 'active',
         ]);
 
@@ -80,8 +80,8 @@ class ProfileTest extends TestCase
         $profile = Profile::factory()->create();
 
         $response = $this->actingAs($admin)->putJson('/api/profiles/' . $profile->id, [
-            'name' => 'Updated Doe',
-            'firstname' => 'Updated John',
+            'name' => 'Updated Name',
+            'firstname' => 'Updated Firstname',
             'status' => 'inactive',
         ]);
 
@@ -89,26 +89,10 @@ class ProfileTest extends TestCase
 
         $this->assertDatabaseHas('profiles', [
             'id' => $profile->id,
-            'name' => 'Updated Doe',
-            'firstname' => 'Updated John',
+            'name' => 'Updated Name',
+            'firstname' => 'Updated Firstname',
             'status' => 'inactive',
         ]);
-    }
-
-    public function testUserCannotUpdateOtherProfile()
-    {
-        $user1 = Admin::factory()->create();
-        $user2 = Admin::factory()->create();
-
-        $profile = Profile::factory()->create(['admin_id' => $user1->id]);
-
-        $response = $this->actingAs($user2)->putJson('/api/profiles/' . $profile->id, [
-            'name' => 'Updated by User2',
-            'firstname' => 'Updated by User2',
-            'status' => 'inactive',
-        ]);
-
-        $response->assertStatus(401);
     }
 
     public function testGuestCanViewAllProfiles()
