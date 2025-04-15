@@ -54,3 +54,9 @@ préparer et remplisser votre base de donnée
  - DELETE : /api/profiles/{profile} : 
  - POST : /api/profiles/{profile}/comments : 
    - comment
+
+### PHPStan
+Pour run phpstan : 
+
+      ./vendor/bin/phpstan analyse --memory-limit=512M 
+
