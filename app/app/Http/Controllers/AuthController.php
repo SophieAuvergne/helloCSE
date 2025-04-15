@@ -15,8 +15,11 @@ class AuthController extends Controller
         //on trouve l'utilisateur via l'email (car unique)
         $admin = Admin::where('email', $request->email)->first();
 
+        /** @var string $password */
+        $password = $request->password;
+
         //vérification du mot de passe
-        if (!$admin || !Hash::check($request->password, $admin->password)) {
+        if (!$admin || !Hash::check($password, $admin->password)) {
             return response()->json(['message' => 'Invalid Credentials'], 401);
         }
 

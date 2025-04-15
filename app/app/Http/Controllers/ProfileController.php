@@ -8,13 +8,15 @@ use App\Models\Profile;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
 class ProfileController extends Controller
 {
     public function store(StoreProfileRequest $request): JsonResponse
     {
         //on détermine le chemin ou sera stocker le fichier sachant que ce champ peut être vide
-        $path = is_null($request->file('image')) ? null : $request->file('image')->store('images', 'public');
+        $file = $request->file('image');
+        $path = $file instanceof UploadedFile ? $file->store('images', 'public') : null;
 
         $profile = Profile::create([
             'name' => $request->get('name'),
@@ -34,7 +36,8 @@ class ProfileController extends Controller
 
         //cas particulier du gestion de l'upload de fichier
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('profiles', 'public');
+            $file = $request->file('image');
+            $path = $file instanceof UploadedFile ? $file->store('images', 'public') : null;
             $data['image_path'] = $path;
         }
         $profile->update($data);
