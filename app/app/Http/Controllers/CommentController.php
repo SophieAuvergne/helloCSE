@@ -12,6 +12,7 @@ class CommentController extends Controller
 {
     public function store(StoreCommentRequest $request, Profile $profile): JsonResponse
     {
+        //un admin ne peut créer que un commentaire par profil
         if ($profile->comments()->where('admin_id', auth()->id())->exists()) {
             return response()->json(['message' => 'Comment already exists.'], 403);
         }

@@ -4,15 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProfileRequest extends FormRequest
+class AuthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        //vérification supplémentaire de l'authentification d'un administrateur
-        return auth()->check();
+        // tout le monde peut sessayer de se log
+        return true;
     }
 
     /**
@@ -23,10 +23,8 @@ class StoreProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'firstname' => 'required',
-            'status' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'email' => 'required|email',
+            'password' => 'required',
         ];
     }
 }
