@@ -15,6 +15,7 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
+        //ajout d'un utilisateur connu pour pouvoir test les endpoint vu qu'il n'ya a pas de register
         DB::table('admins')->insert([
             'name' => 'admin',
             'email' => 'admin@admin.com',
