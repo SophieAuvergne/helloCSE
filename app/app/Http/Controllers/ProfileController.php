@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -46,8 +47,11 @@ class ProfileController extends Controller
 
     public function indexPublic(): JsonResponse
     {
-        return Profile::where('status', 'active')
+        $profiles = Profile::where('status', 'active')
             ->select('id', 'name', 'image_path')
-            ->get();
+            ->get()
+        ;
+
+        return response()->json($profiles, 200);
     }
 }
