@@ -37,26 +37,27 @@ préparer et remplisser votre base de donnée
 ### Endpoint existant publics : 
  - POST : /api/login : permet l'authentification
    - email
-   - password
+   - password (string)
  - GET : /api/profiles : récupération des profiles
 
 ### Endpoint existant privés : 
- - POST : /api/profiles : 
-   - name 
-   - firstname
-   - image
-   - status
+   - POST : /api/profiles : 
+   - name (string)
+   - firstname (string)
+   - image (file)
+   - status (string : "active" "pending" or "inactive")
  - PUT : /api/profiles/{profile} : 
-   - name
-   - firstname
-   - image
-   - status
+   - name (string)
+   - firstname (string)
+   - image (file)
+   - status (string : "active" "pending" or "inactive")
  - DELETE : /api/profiles/{profile} : 
  - POST : /api/profiles/{profile}/comments : 
-   - comment
+   - comment (text)
 
 ### PHPStan
 Pour run phpstan : 
 
       ./vendor/bin/phpstan analyse --memory-limit=512M 
 
+La version rendu de ce test valide le passage de phpstan en level 10
