@@ -1,8 +1,8 @@
 services:
   app:
     build:
-      context: ./docker/php
-      dockerfile: Dockerfile
+      context: ./app
+      dockerfile: ../docker/php/Dockerfile
     volumes:
       - ./app:/var/www/html:z
     working_dir: /var/www/html
