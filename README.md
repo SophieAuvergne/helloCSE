@@ -41,7 +41,7 @@ préparer et remplisser votre base de donnée
  - GET : /api/profiles : récupération des profiles
 
 ### Endpoint existant privés : 
-   - POST : /api/profiles : 
+ - POST : /api/profiles : 
    - name (string)
    - firstname (string)
    - image (file)
