@@ -11,6 +11,7 @@ class StoreCommentRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        //vérification supplémentaire de l'authentification d'un administrateur
         return auth()->check();
     }
 

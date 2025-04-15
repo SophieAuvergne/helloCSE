@@ -8,12 +8,15 @@ use App\Models\Profile;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
 class ProfileController extends Controller
 {
     public function store(StoreProfileRequest $request): JsonResponse
     {
-        $path = is_null($request->file('image')) ? null : $request->file('image')->store('images', 'public');
+        //on détermine le chemin ou sera stocker le fichier sachant que ce champ peut être vide
+        $file = $request->file('image');
+        $path = $file instanceof UploadedFile ? $file->store('images', 'public') : null;
 
         $profile = Profile::create([
             'name' => $request->get('name'),
@@ -28,9 +31,13 @@ class ProfileController extends Controller
 
     public function update(UpdateProfileRequest $request, Profile $profile): JsonResponse
     {
+        //on récupère les information validés
         $data = $request->validated();
+
+        //cas particulier du gestion de l'upload de fichier
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('profiles', 'public');
+            $file = $request->file('image');
+            $path = $file instanceof UploadedFile ? $file->store('images', 'public') : null;
             $data['image_path'] = $path;
         }
         $profile->update($data);
@@ -47,6 +54,7 @@ class ProfileController extends Controller
 
     public function indexPublic(): JsonResponse
     {
+        //on ne met pas status dans le select car il s'agit d'un endpoint public et que l'information status est restreinte aux admin
         $profiles = Profile::where('status', 'active')
             ->select('id', 'name', 'image_path')
             ->get()
